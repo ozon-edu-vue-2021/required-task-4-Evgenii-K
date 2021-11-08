@@ -1,6 +1,5 @@
 <template>
   <div class="form">
-
     <div class="form__item">
       <div class="form__item-header">Личные данные</div>
       <div 
@@ -28,9 +27,20 @@
         <base-input
           type="date"
           lable="Дата рождения"
-          id="second_name"
+          id="birthday"
         />      
       </div>
+
+      <div 
+        class="form__email"
+      >
+        <base-input
+          type="email"
+          lable="E-mail"
+          id="email"
+        />      
+      </div>
+
     </div>
 
     <div class="form__item">
@@ -38,12 +48,20 @@
         <div 
           class="form__birthday"
         >
-          <base-dropdown
+          <base-multi-select
             lable="Гражданство"
-            id="citizenship"
-          />      
+            :items="citizenships"
+            prop-name="nationality"
+            :selected="selectedСitizenships"
+            @update="updateCitizenships"
+          />
         </div>
-        <form-russian-citizenship/>
+        <form-russian-citizenship
+          v-if="isRussian"
+        />
+        <form-other-citizenship
+          v-else
+        />
     </div>
 
   </div>
@@ -51,18 +69,39 @@
 
 <script>
 import BaseInput from './BaseInput'
-import BaseDropdown from './BaseDropdown'
-import FormRussianCitizenship from './FormRussianCitizenship.vue';
+import FormRussianCitizenship from './FormRussianCitizenship';
+import FormOtherCitizenship from './FormOtherCitizenship';
+import BaseMultiSelect from './BaseMultiSelect';
+import citizenships from '../assets/data/citizenships.json'
+
 export default {
   data() {
-    return {};
+    return {
+      citizenships,
+      selectedСitizenships: {}
+    };
   },
   components: {
     BaseInput,
-    BaseDropdown,
+    BaseMultiSelect,
     FormRussianCitizenship,
+    FormOtherCitizenship,
   },
-  methods: {},
+  created() {
+    if(this.citizenships.length) {
+      this.selectedСitizenships = this.citizenships[0]
+    }
+  },
+  methods: {
+    updateCitizenships(item) {
+      this.selectedСitizenships = item
+    }
+  },
+  computed: {
+    isRussian() {
+      return this.selectedСitizenships.nationality === 'Russia'
+    }
+  },
 };
 </script>
 
@@ -70,6 +109,7 @@ export default {
 .form {
   display: grid;
   grid-gap: 20px;
+  width: 800px;
 }
 
 .form__item {
@@ -91,5 +131,10 @@ export default {
 .form__birthday {
   display: grid;
   grid-template-columns: 1fr 1fr;
+}
+
+.form__email {
+  display: grid;
+  grid-template-columns: 1fr;
 }
 </style>

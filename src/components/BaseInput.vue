@@ -10,6 +10,8 @@
       :id="id"
       class="base-input"
       :type="type"
+      :value="value"
+      @input="$emit('input', $event.target.value)"
     />
   </div>
 </template>
@@ -29,6 +31,10 @@ export default {
     type: {
       type: String,
       default: 'text'
+    },
+    value: {
+      type: String,
+      default: ''
     }
   }
 }

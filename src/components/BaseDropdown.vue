@@ -1,40 +1,24 @@
 <template>
-  <div
-    v-click-outside="close"
-    @click="toggle"
-  >  
-    <label 
-      :for="id"
-      class="base-input__lable"
-    >
-      {{ lable }}
-    </label>
-    <input
-      :id="id"
-      class="base-input"
-      :value="value"
-    />
-
+  <div 
+    v-click-outside="closeOutside"
+    class="drop-down-toggle"
+  >
     <div
-      :id="id"
-      v-if="opened"
+      @click="open"
     >
-      <ul
-        v-if="arr"
+      <slot name="drop-down-toggle"></slot>
+      
+    </div>
+    <div
+      v-show="opened"
+      @click="close"
+      class="drop-down-content"
+    >
+      <slot 
+        name="drop-down-content"
+        class="test"
       >
-        <li
-          v-for="index in arr"
-          :key="index"
-          @click="onClick"
-        >
-          {{ index }}
-        </li>
-      </ul>
-      <div
-        v-else
-      >
-        Ничего не найдено
-      </div>
+      </slot>
     </div>
   </div>
 </template>
@@ -44,37 +28,20 @@ import ClickOutside from "vue-click-outside";
 
 export default {
   name: 'BaseDropdown',
-  props: {
-    id: {
-      type: String,
-      require
-    },
-    lable: {
-      type: String,
-      default: ''
-    },
-  },
-  data() {
-    return {
-      opened: false,
-      arr: [1,2,3,4,5],
-      value: '',
-    }
-  },
-  mounted() {
-    if(this.arr) {
-      this.value = this.arr[0]
-    }
-  },
+  data: () => ({
+    opened: false,
+  }),
   methods: {
-    toggle() {
-      this.opened = !this.opened
+    open() {
+      this.opened = true
+    },
+    closeOutside() {
+      if(!this.opened) return
+      this.opened = false
+      this.$emit('close')
     },
     close() {
       this.opened = false
-    },
-    onClick(select) {
-      this.value = select.target.textContent.trim()
     }
   },
   directives: {
@@ -84,30 +51,26 @@ export default {
 </script>
 
 <style scoped>
-.base-input {
+.drop-down-toggle{
+  position: relative;
+}
+.drop-down-content {
+  position: absolute;
   background-color: #fff;
-  width: 100%;
   border: 2px solid #dce0e6;
   border-radius: 5px;
-  padding: 0px 10px;
-  margin-top: 10px;
-  font-size: 16px;
-  height: 40px;
+  display: grid;
+  width: 100%;
+  padding: 5px 0;
 }
 
-.base-input:focus-visible {
-  border-color: #2459f6;
-  outline: 0px solid #2459f6;
+.drop-down-content > div {
+  padding: 10px;
 }
 
-.base-input:active {
-  border-color: #2459f6;
+.drop-down-content > div:hover {
+  background-color: rgb(233, 233, 233);
+  cursor: pointer;
 }
-
-.base-input__lable {
-  color: #8a99a9;
-}
-
-
 
 </style>

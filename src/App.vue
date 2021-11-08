@@ -17,6 +17,9 @@ export default {
 
 <style>
 #app {
+  display: grid;
+  justify-content: center;
+  align-items: start;
   font-family: Avenir, Helvetica, Arial, sans-serif;
   color: #2c3e50;
   background-color: #fafafa;
@@ -28,6 +31,13 @@ html,
 body,
 #app {
   height: 100%;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
 }
 
 * {
