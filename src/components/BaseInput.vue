@@ -12,6 +12,8 @@
       :type="type"
       :value="value"
       @input="$emit('input', $event.target.value)"
+      :required="required"
+      :readonly="readonly"
     />
   </div>
 </template>
@@ -35,6 +37,14 @@ export default {
     value: {
       type: String,
       default: ''
+    },
+    required: {
+      type: Boolean,
+      default: false
+    },
+    readonly: {
+      type: Boolean,
+      default: false
     }
   }
 }

@@ -71,7 +71,6 @@ export default {
   },
   watch: {
     value() {
-
       if(!this.items.length) return
 
       if (this.value === '') {
@@ -85,7 +84,10 @@ export default {
   },
   mounted() {
     if(this.items) {
-      this.value = this.selected[this.propName]
+
+      this.itemsAfterFilter = this.items
+
+      this.isSelected()
     }
   },
   methods: {
@@ -94,9 +96,10 @@ export default {
       this.value = item[this.propName]
     },
     blurHandler() {
+
       const target = this.items.filter(item => item[this.propName].toLowerCase() === this.value.toLowerCase())
       if (!target.length) {
-        this.value = this.selected[this.propName]
+        this.isSelected()
       } else {
         this.value = target[0][this.propName]
         this.$emit('update', target[0])
@@ -104,6 +107,11 @@ export default {
     },
     clickOnInput() {
       this.value = ''
+    },
+    isSelected() {
+      this.value = this.selected[this.propName] 
+        ? this.selected[this.propName]
+        : ''
     }
   },
   components: { BaseDropdown, BaseInput },

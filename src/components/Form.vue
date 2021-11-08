@@ -1,19 +1,22 @@
 <template>
-  <div class="form">
+  <form 
+    class="form"
+    @submit.prevent="onSubmit"
+  >
     <div class="form__item">
       <div class="form__item-header">Личные данные</div>
-      <div 
-        class="form__name-cyrillic"
-      >
+      <div class="form__name-cyrillic">
         <base-input
           type="text"
           lable="Фамилия"
           id="second_name"
+          v-model="formDate.secondName"
         />      
         <base-input
           type="text"
           lable="Имя"
           id="first_name"
+          v-model="formDate.firstName"
         />      
         <base-input
           type="text"
@@ -21,9 +24,7 @@
           id="third_name"
         />
       </div>
-      <div 
-        class="form__birthday"
-      >
+      <div class="form__birthday">
         <base-input
           type="date"
           lable="Дата рождения"
@@ -31,44 +32,40 @@
         />      
       </div>
 
-      <div 
-        class="form__email"
-      >
+      <div class="form__email">
         <base-input
           type="email"
           lable="E-mail"
           id="email"
         />      
       </div>
-
     </div>
 
     <div class="form__item">
       <div class="form__item-header">Паспортные данные</div>
-        <div 
-          class="form__birthday"
-        >
-          <base-multi-select
-            lable="Гражданство"
-            :items="citizenships"
-            prop-name="nationality"
-            :selected="selectedСitizenships"
-            @update="updateCitizenships"
-          />
-        </div>
-        <form-russian-citizenship
-          v-if="isRussian"
+      <div class="form__birthday">
+        <base-multi-select
+          lable="Гражданство"
+          :items="citizenships"
+          prop-name="nationality"
+          :selected="selectedСitizenships"
+          @update="updateCitizenships"
         />
-        <form-other-citizenship
-          v-else
-        />
+      </div>
+      <form-russian-citizenship v-if="isRussian"/>
+      <form-other-citizenship v-else/>
     </div>
 
-  </div>
+    <div class="form__button">
+      <base-button>Отправить</base-button>
+    </div>
+
+  </form>
 </template>
 
 <script>
 import BaseInput from './BaseInput'
+import BaseButton from './BaseButton'
 import FormRussianCitizenship from './FormRussianCitizenship';
 import FormOtherCitizenship from './FormOtherCitizenship';
 import BaseMultiSelect from './BaseMultiSelect';
@@ -78,11 +75,16 @@ export default {
   data() {
     return {
       citizenships,
-      selectedСitizenships: {}
+      selectedСitizenships: {},
+      formDate: {
+        firstName: '',
+        secondName: '',
+      }
     };
   },
   components: {
     BaseInput,
+    BaseButton,
     BaseMultiSelect,
     FormRussianCitizenship,
     FormOtherCitizenship,
@@ -95,7 +97,10 @@ export default {
   methods: {
     updateCitizenships(item) {
       this.selectedСitizenships = item
-    }
+    },
+    onSubmit() {
+      console.log(this.formDate);
+    },
   },
   computed: {
     isRussian() {
@@ -136,5 +141,11 @@ export default {
 .form__email {
   display: grid;
   grid-template-columns: 1fr;
+}
+
+.form__button {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 </style>

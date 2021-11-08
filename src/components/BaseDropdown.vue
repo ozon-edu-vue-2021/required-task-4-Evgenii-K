@@ -56,6 +56,7 @@ export default {
 }
 .drop-down-content {
   position: absolute;
+  z-index: 10;
   background-color: #fff;
   border: 2px solid #dce0e6;
   border-radius: 5px;
