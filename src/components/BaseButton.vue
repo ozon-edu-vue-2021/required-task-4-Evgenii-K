@@ -1,7 +1,5 @@
 <template>
-  <button 
-    class="button" 
-  >
+  <button class="button" >
     <slot></slot>
   </button>
 </template>
@@ -26,18 +24,14 @@ export default {
   max-width: max-content;
   flex-shrink: 0;
 }
-
 .button:hover {
   background-color: #003ead;
 }
-
 .button:active {
   background-color: #005bff;
   box-shadow: 0 0 5px 0 rgba(0, 91, 255, 0.5);
 }
-
 .button:disabled {
   background-color: #5a6c7d;
 }
-
 </style>

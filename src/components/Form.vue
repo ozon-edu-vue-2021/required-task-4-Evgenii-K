@@ -8,39 +8,43 @@
       <div class="form__name-cyrillic">
         <base-input
           type="text"
-          lable="Фамилия"
+          label="Фамилия"
           id="second_name"
-          v-model="formData.secondName"
+          v-model.trim="formData.secondName"
+          required
         />      
         <base-input
           type="text"
-          lable="Имя"
+          label="Имя"
           id="first_name"
-          v-model="formData.firstName"
+          v-model.trim="formData.firstName"
+          required
         />      
         <base-input
           type="text"
-          lable="Отчество"
+          label="Отчество"
           id="third_name"
-          v-model="formData.thirdName"
+          v-model.trim="formData.thirdName"
         />
       </div>
 
       <div class="form__birthday">
         <base-input
           type="date"
-          lable="Дата рождения"
+          label="Дата рождения"
           id="birthday"
           v-model="formData.birthday"
+          required
         />      
       </div>
 
       <div class="form__email">
         <base-input
           type="email"
-          lable="E-mail"
+          label="E-mail"
           id="email"
-          v-model="formData.email"
+          v-model.trim="formData.email"
+          required
         />      
       </div>
     </div>
@@ -58,7 +62,7 @@
       <div class="form__item-header">Паспортные данные</div>
       <div class="form__birthday">
         <base-multi-select
-          lable="Гражданство"
+          label="Гражданство"
           :items="citizenships"
           :prop-name="propCitizenship"
           :selected="selectedСitizenships"
@@ -85,26 +89,28 @@
     </div>
 
     <div 
-      v-show="previousName === 'true'"
+      v-show="isPreviousName"
       class="form__birthday"
     >
       <base-input
         type="text"
-        lable="Фамилия"
+        label="Фамилия"
         id="new_second_name"
-        v-model="formData.previous.secondName"
+        v-model.trim="formData.previous.secondName"
+        :required="isPreviousName"
       />      
       <base-input
         type="text"
-        lable="Имя"
+        label="Имя"
         id="new_first_name"
-        v-model="formData.previous.firstName"
+        v-model.trim="formData.previous.firstName"
+        :required="isPreviousName"
       />     
     </div>
 
 
     <div class="form__button">
-      <base-button>Отправить</base-button>
+      <base-button type="submit">Отправить</base-button>
     </div>
 
   </form>
@@ -204,12 +210,14 @@ export default {
     },
     updatePassport(value) {
       this.passport =  {...this.passport, ...value}
-
     }
   },
   computed: {
     isRussian() {
       return this.selectedСitizenships.nationality === 'Russia'
+    },
+    isPreviousName() {
+      return this.previousName === 'true'
     }
   },
 };
@@ -221,34 +229,28 @@ export default {
   grid-gap: 20px;
   width: 800px;
 }
-
 .form__item {
   display: grid;
   grid-gap: 20px;
 }
-
 .form__item-header {
   font-size: 18px;
   font-weight: 500;
 }
-
 .form__name-cyrillic {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-gap: 20px;
 }
-
 .form__birthday {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 20px;
 }
-
 .form__email {
   display: grid;
   grid-template-columns: 1fr;
 }
-
 .form__button {
   display: flex;
   justify-content: flex-end;

@@ -1,24 +1,10 @@
 <template>
-  <div 
-    v-click-outside="closeOutside"
-    class="drop-down-toggle"
-  >
-    <div
-      @click="open"
-    >
+  <div v-click-outside="closeOutside" class="drop-down-toggle">
+    <div @click="open">
       <slot name="drop-down-toggle"></slot>
-      
     </div>
-    <div
-      v-show="opened"
-      @click="close"
-      class="drop-down-content"
-    >
-      <slot 
-        name="drop-down-content"
-        class="test"
-      >
-      </slot>
+    <div v-show="opened" @click="close" class="drop-down-content">
+      <slot name="drop-down-content" class="test"></slot>
     </div>
   </div>
 </template>
@@ -64,14 +50,11 @@ export default {
   width: 100%;
   padding: 5px 0;
 }
-
 .drop-down-content > div {
   padding: 10px;
 }
-
 .drop-down-content > div:hover {
   background-color: rgb(233, 233, 233);
   cursor: pointer;
 }
-
 </style>

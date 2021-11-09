@@ -1,20 +1,18 @@
 <template>
-  <base-dropdown
-    @close="blurHandler"
-  >
+  <base-dropdown @close="blurHandler">
     <template slot="drop-down-toggle">
       <div
         @click="clickOnInput"
       >
         <base-input
           :id="propName"
-          :lable="lable"
+          :label="label"
           type="text"
           v-model="value"
           :readonly="readonly"
+          :required="required"
         />
       </div>
-
     </template>
 
     <template 
@@ -31,8 +29,8 @@
     </template>
 
     <template 
-      slot="drop-down-content"
       v-else
+      slot="drop-down-content"
     >
       <div>
         Ничего не найдено
@@ -60,11 +58,15 @@ export default {
       type: Object,
       default: () => ({})
     },
-    lable: {
+    label: {
       type: String,
-      dafault: ''
+      default: ''
     },
     readonly: {
+      type: Boolean,
+      default: false
+    },
+    required: {
       type: Boolean,
       default: false
     }
@@ -87,7 +89,7 @@ export default {
     }
   },
   mounted() {
-    if(this.items) {
+    if(this.items.length) {
 
       this.itemsAfterFilter = this.items
 

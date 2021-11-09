@@ -1,55 +1,53 @@
 <template>
-  <div class="form__item">
 
-    <div
-      class="form__passport-name"
-    >
+  <div class="form__item">
+    <div class="form__passport-name">
       <base-input
         type="text"
-        lable="Фамилия на латинице"
+        label="Фамилия на латинице"
         id="second_name_latin"
-        v-model="passport.secondName"
+        v-model.trim="passport.secondName"
         @input="update"
+        required
       />      
       <base-input
         type="text"
-        lable="Имя на латинице"
+        label="Имя на латинице"
         id="first_name_latin"
-        v-model="passport.firstName"
+        v-model.trim="passport.firstName"
         @input="update"
+        required
       />  
 
-      <span
-        class="form__passport-span"
-      >
+      <span class="form__passport-span">
         Иностранцы заполняют латинскими буквами. Например, Ivanov Ivan
       </span>  
     </div>
 
-    <div
-      class="form__passport-about"
-    >
+    <div class="form__passport-about">
       <base-input
         type="number"
-        lable="Номер паспорта"
+        label="Номер паспорта"
         id="passport_number_russian"
-        v-model="passport.number"
+        v-model.number="passport.number"
         @input="update"
+        required
       />  
       <base-multi-select
-        lable="Страна выдачи"
+        label="Страна выдачи"
         :items="citizenships"
         :prop-name="propCitizenship"
         :selected="selectedCitizenship"
         @update="updateCitizenship"
+        required
       />     
       <base-multi-select
-        lable="Тип паспорта"
+        label="Тип паспорта"
         :items="passportTypes"
         :prop-name="propPassportType"
         :selected="selectedPassportTypes"
         @update="updatePassportType"
-        :readonly="true"
+        readonly
       />     
     </div>
 
@@ -112,24 +110,20 @@ export default {
 </script>
 
 <style scoped>
-
 .form__item {
   display: grid;
   grid-gap: 20px;
 }
-
 .form__passport-about {
   display: grid;
   grid-template-columns: 1fr 1fr 2fr;    
   grid-gap: 20px;
 }
-
 .form__passport-name {
   display: grid;
   grid-template-columns: 1fr 1fr;    
   grid-column-gap: 20px;
 }
-
 .form__passport-span {
   font-size: 12px;
   color: #8a99a9;
