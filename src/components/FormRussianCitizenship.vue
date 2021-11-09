@@ -7,11 +7,15 @@
           type="number"
           lable="Серия паспорта"
           id="passport_series_russian"
+          v-model="passportRussian.series"
+          v-mask="'####'"
         />      
         <base-input
           type="number"
           lable="Номер паспорта"
           id="passport_number_russian"
+          v-model="passportRussian.number"
+          v-mask="'######'"
         />      
         <base-input
           type="date"
@@ -24,14 +28,23 @@
 
 <script>
 import BaseInput from './BaseInput'
+import { VueMaskDirective } from "v-mask"
+
 export default {
   data() {
-    return {};
+    return {
+      passportRussian: {
+        series: '',
+        number: ''
+      }
+    };
   },
   components: {
     BaseInput,
   },
-  methods: {},
+  directives: {
+    mask: VueMaskDirective,
+  }
 };
 </script>
 

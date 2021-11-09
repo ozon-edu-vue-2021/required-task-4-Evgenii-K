@@ -29,6 +29,7 @@
         type="number"
         lable="Номер паспорта"
         id="passport_number_russian"
+        v-model="passport"
       />  
       <base-multi-select
         lable="Страна выдачи"
@@ -57,7 +58,8 @@ export default {
     return {
       citizenships,
       selectedСitizenships: {},
-  };
+      passport: '',
+    };
   },
   created() {
     if(this.citizenships.length) {
@@ -72,7 +74,7 @@ export default {
     updateCitizenships(item) {
       this.selectedСitizenships = item
     },
-  }
+  },
 };
 </script>
 

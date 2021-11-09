@@ -24,6 +24,7 @@
           id="third_name"
         />
       </div>
+
       <div class="form__birthday">
         <base-input
           type="date"
@@ -42,6 +43,15 @@
     </div>
 
     <div class="form__item">
+      <div class="form__item-header">Пол</div>
+      <base-radio
+        :items="gender"
+        :picked="'male'"
+        @picked="updateGender"
+      />
+    </div>
+
+    <div class="form__item">
       <div class="form__item-header">Паспортные данные</div>
       <div class="form__birthday">
         <base-multi-select
@@ -55,6 +65,34 @@
       <form-russian-citizenship v-if="isRussian"/>
       <form-other-citizenship v-else/>
     </div>
+
+    <div class="form__item">
+      <div class="form__item-header">Меняли ли фамилию или имя?</div>
+      <base-radio
+        :items="changedName"
+        :picked="'false'"
+        @picked="updateChangedName"
+      />
+    </div>
+
+    <div 
+      v-show="pickedChangedName === 'true'"
+      class="form__birthday"
+    >
+      <base-input
+        type="text"
+        lable="Фамилия"
+        id="new_second_name"
+        v-model="formDate.newSecondName"
+      />      
+      <base-input
+        type="text"
+        lable="Имя"
+        id="new_first_name"
+        v-model="formDate.newFirstName"
+      />     
+    </div>
+
 
     <div class="form__button">
       <base-button>Отправить</base-button>
@@ -70,6 +108,7 @@ import FormRussianCitizenship from './FormRussianCitizenship';
 import FormOtherCitizenship from './FormOtherCitizenship';
 import BaseMultiSelect from './BaseMultiSelect';
 import citizenships from '../assets/data/citizenships.json'
+import BaseRadio from './BaseRadio.vue';
 
 export default {
   data() {
@@ -79,7 +118,27 @@ export default {
       formDate: {
         firstName: '',
         secondName: '',
-      }
+      },
+      gender: [
+        {
+          name: 'male',
+          title: 'Мужской'
+        }, {
+          name: 'famale',
+          title: 'Женский'
+        },
+      ],
+      pickedGender: '',
+      changedName: [
+        {
+          name: 'false',
+          title: 'Нет'
+        }, {
+          name: 'true',
+          title: 'Да'
+        }
+      ],
+      pickedChangedName: '',
     };
   },
   components: {
@@ -88,6 +147,7 @@ export default {
     BaseMultiSelect,
     FormRussianCitizenship,
     FormOtherCitizenship,
+    BaseRadio,
   },
   created() {
     if(this.citizenships.length) {
@@ -101,6 +161,12 @@ export default {
     onSubmit() {
       console.log(this.formDate);
     },
+    updateGender(value) {
+      this.pickedGender = value
+    },
+    updateChangedName(value) {
+      this.pickedChangedName = value
+    }
   },
   computed: {
     isRussian() {
@@ -136,6 +202,7 @@ export default {
 .form__birthday {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  grid-gap: 20px;
 }
 
 .form__email {
@@ -147,5 +214,6 @@ export default {
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  margin-top: 30px;
 }
 </style>
