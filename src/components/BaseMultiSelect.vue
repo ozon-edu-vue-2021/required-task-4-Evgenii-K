@@ -43,6 +43,7 @@
 <script>
 import BaseDropdown from './BaseDropdown.vue'
 import BaseInput from './BaseInput.vue'
+import _ from 'lodash'
 
 export default {
   props: {
@@ -72,14 +73,12 @@ export default {
   watch: {
     value() {
       if(!this.items.length) return
-
+        
       if (this.value === '') {
         this.itemsAfterFilter = this.items
-      } else {
-        this.itemsAfterFilter = this.items.filter(item => 
-          item[this.propName].toLowerCase().includes(this.value.toLowerCase())
-        )
       }
+
+      this.debounceMethod(this)
     }
   },
   mounted() {
@@ -96,8 +95,8 @@ export default {
       this.value = item[this.propName]
     },
     blurHandler() {
-
       const target = this.items.filter(item => item[this.propName].toLowerCase() === this.value.toLowerCase())
+
       if (!target.length) {
         this.isSelected()
       } else {
@@ -112,7 +111,19 @@ export default {
       this.value = this.selected[this.propName] 
         ? this.selected[this.propName]
         : ''
-    }
+    },
+    debounceMethod: 
+      _.debounce((json) => {
+        console.log('Button clicked!', json.value)
+
+        if (json.value === '') {
+          json.itemsAfterFilter = json.items
+        } else {
+          json.itemsAfterFilter = json.items.filter(item => 
+            item[json.propName].toLowerCase().includes(json.value.toLowerCase())
+          )
+        }
+      }, 1000)
   },
   components: { BaseDropdown, BaseInput },
 }
