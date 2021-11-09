@@ -8,11 +8,15 @@
         type="text"
         lable="Фамилия на латинице"
         id="second_name_latin"
+        v-model="passport.secondName"
+        @input="update"
       />      
       <base-input
         type="text"
         lable="Имя на латинице"
         id="first_name_latin"
+        v-model="passport.firstName"
+        @input="update"
       />  
 
       <span
@@ -29,20 +33,24 @@
         type="number"
         lable="Номер паспорта"
         id="passport_number_russian"
-        v-model="passport"
+        v-model="passport.number"
+        @input="update"
       />  
       <base-multi-select
         lable="Страна выдачи"
         :items="citizenships"
-        prop-name="nationality"
-        :selected="selectedСitizenships"
-        @update="updateCitizenships"
+        :prop-name="propCitizenship"
+        :selected="selectedCitizenship"
+        @update="updateCitizenship"
       />     
-      <base-input
-        type="date"
-        lable="Дата выдачи"
-        id="date_of_issue"
-      />
+      <base-multi-select
+        lable="Тип паспорта"
+        :items="passportTypes"
+        :prop-name="propPassportType"
+        :selected="selectedPassportTypes"
+        @update="updatePassportType"
+        :readonly="true"
+      />     
     </div>
 
   </div>
@@ -52,18 +60,33 @@
 import BaseInput from './BaseInput'
 import BaseMultiSelect from './BaseMultiSelect';
 import citizenships from '../assets/data/citizenships.json'
+import passportTypes from '../assets/data/passport-types.json'
 
 export default {
   data() {
     return {
       citizenships,
-      selectedСitizenships: {},
-      passport: '',
+      passportTypes,
+      selectedPassportTypes: {},
+      selectedCitizenship: {},
+      propPassportType: 'type',
+      propCitizenship: 'nationality',
+      passport: {
+        secondName: '',
+        firstName: '',
+        number: '',
+        type: '',
+        citizenship: '',
+      },
     };
   },
   created() {
     if(this.citizenships.length) {
-      this.citizenships = this.citizenships.filter(country => country.nationality !== 'Russia')
+      this.citizenships = this.citizenships.filter(country => country[this.propCitizenship] !== 'Russia')
+    }
+    if(this.passportTypes.length) {
+      this.selectedPassportTypes = this.passportTypes[0]
+      this.passport.type = this.selectedPassportTypes[this.propPassportType]
     }
   },
   components: {
@@ -71,9 +94,19 @@ export default {
     BaseMultiSelect,
   },
   methods: {
-    updateCitizenships(item) {
-      this.selectedСitizenships = item
+    updateCitizenship(item) {
+      this.selectedCitizenship = item
+      this.passport.citizenship = this.selectedCitizenship[this.propCitizenship]
+      this.update()
     },
+    updatePassportType(item) {
+      this.selectedPassportTypes = item
+      this.passport.type = this.selectedPassportTypes[this.propPassportType]
+      this.update()
+    },
+    update() {
+      this.$emit('update', { foreign: this.passport })
+    }
   },
 };
 </script>

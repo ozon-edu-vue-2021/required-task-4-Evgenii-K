@@ -11,6 +11,7 @@
           :lable="lable"
           type="text"
           v-model="value"
+          :readonly="readonly"
         />
       </div>
 
@@ -62,6 +63,10 @@ export default {
     lable: {
       type: String,
       dafault: ''
+    },
+    readonly: {
+      type: Boolean,
+      default: false
     }
   },
   data() {

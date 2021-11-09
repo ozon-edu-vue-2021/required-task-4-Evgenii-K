@@ -7,20 +7,24 @@
           type="number"
           lable="Серия паспорта"
           id="passport_series_russian"
-          v-model="passportRussian.series"
+          v-model="passport.series"
           v-mask="'####'"
+          @input="update"
         />      
         <base-input
           type="number"
           lable="Номер паспорта"
           id="passport_number_russian"
-          v-model="passportRussian.number"
+          v-model="passport.number"
           v-mask="'######'"
+          @input="update"
         />      
         <base-input
           type="date"
           lable="Дата выдачи"
           id="date_of_issue"
+          v-model="passport.date"
+          @input="update"
         />
       </div>
     </div>
@@ -33,14 +37,20 @@ import { VueMaskDirective } from "v-mask"
 export default {
   data() {
     return {
-      passportRussian: {
+      passport: {
         series: '',
-        number: ''
+        number: '',
+        date: '',
       }
     };
   },
   components: {
     BaseInput,
+  },
+  methods: {
+    update() {
+      this.$emit('update', { russian: this.passport})
+    }
   },
   directives: {
     mask: VueMaskDirective,

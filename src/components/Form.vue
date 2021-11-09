@@ -10,18 +10,19 @@
           type="text"
           lable="Фамилия"
           id="second_name"
-          v-model="formDate.secondName"
+          v-model="formData.secondName"
         />      
         <base-input
           type="text"
           lable="Имя"
           id="first_name"
-          v-model="formDate.firstName"
+          v-model="formData.firstName"
         />      
         <base-input
           type="text"
           lable="Отчество"
           id="third_name"
+          v-model="formData.thirdName"
         />
       </div>
 
@@ -30,6 +31,7 @@
           type="date"
           lable="Дата рождения"
           id="birthday"
+          v-model="formData.birthday"
         />      
       </div>
 
@@ -38,6 +40,7 @@
           type="email"
           lable="E-mail"
           id="email"
+          v-model="formData.email"
         />      
       </div>
     </div>
@@ -45,8 +48,8 @@
     <div class="form__item">
       <div class="form__item-header">Пол</div>
       <base-radio
-        :items="gender"
-        :picked="'male'"
+        :items="genderTitle"
+        :picked="formData.gender"
         @picked="updateGender"
       />
     </div>
@@ -57,39 +60,45 @@
         <base-multi-select
           lable="Гражданство"
           :items="citizenships"
-          prop-name="nationality"
+          :prop-name="propCitizenship"
           :selected="selectedСitizenships"
           @update="updateCitizenships"
         />
       </div>
-      <form-russian-citizenship v-if="isRussian"/>
-      <form-other-citizenship v-else/>
+      <form-russian-citizenship 
+        v-if="isRussian"
+        @update="updatePassport"
+      />
+      <form-other-citizenship 
+        v-else
+        @update="updatePassport"
+      />
     </div>
 
     <div class="form__item">
       <div class="form__item-header">Меняли ли фамилию или имя?</div>
       <base-radio
-        :items="changedName"
-        :picked="'false'"
-        @picked="updateChangedName"
+        :items="previousNameTitle"
+        :picked="previousName"
+        @picked="updateName"
       />
     </div>
 
     <div 
-      v-show="pickedChangedName === 'true'"
+      v-show="previousName === 'true'"
       class="form__birthday"
     >
       <base-input
         type="text"
         lable="Фамилия"
         id="new_second_name"
-        v-model="formDate.newSecondName"
+        v-model="formData.previous.secondName"
       />      
       <base-input
         type="text"
         lable="Имя"
         id="new_first_name"
-        v-model="formDate.newFirstName"
+        v-model="formData.previous.firstName"
       />     
     </div>
 
@@ -115,21 +124,45 @@ export default {
     return {
       citizenships,
       selectedСitizenships: {},
-      formDate: {
+      propCitizenship: 'nationality',
+      formData: {
         firstName: '',
         secondName: '',
+        thirdName: '',
+        birthday: '',
+        email: '',
+        gender: 'male',
+        citizenship: '',
+        previous: {
+          firstName: '',
+          secondName: '',
+        }
       },
-      gender: [
+      passport: {
+        russian: {
+          series: '',
+          number: '',
+          date: '',
+        },
+        foreign: {
+          secondName: '',
+          firstName: '',
+          number: '',
+          type: '',
+          citizenship: '',
+        },
+      },
+      genderTitle: [
         {
           name: 'male',
           title: 'Мужской'
         }, {
-          name: 'famale',
+          name: 'female',
           title: 'Женский'
         },
       ],
-      pickedGender: '',
-      changedName: [
+      previousName: 'false',
+      previousNameTitle: [
         {
           name: 'false',
           title: 'Нет'
@@ -138,7 +171,6 @@ export default {
           title: 'Да'
         }
       ],
-      pickedChangedName: '',
     };
   },
   components: {
@@ -152,20 +184,27 @@ export default {
   created() {
     if(this.citizenships.length) {
       this.selectedСitizenships = this.citizenships[0]
+      this.formData.citizenship = this.selectedСitizenships[this.propCitizenship]
     }
   },
   methods: {
     updateCitizenships(item) {
       this.selectedСitizenships = item
+      this.formData.citizenship = this.selectedСitizenships[this.propCitizenship]
     },
     onSubmit() {
-      console.log(this.formDate);
+      const result = {...this.formData, passport: this.passport }
+      console.log(JSON.stringify(result));
     },
     updateGender(value) {
-      this.pickedGender = value
+      this.formData.pickedGender = value
     },
-    updateChangedName(value) {
-      this.pickedChangedName = value
+    updateName(value) {
+      this.previousName = value
+    },
+    updatePassport(value) {
+      this.passport =  {...this.passport, ...value}
+
     }
   },
   computed: {
