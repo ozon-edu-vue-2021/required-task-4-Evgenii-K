@@ -1,17 +1,21 @@
 <template>
   <div>  
-    <label :for="id" class="base-input__label">
-      {{ label }}
-    </label>
-    <input
-      :id="id"
-      :class="ifError"
-      :type="type"
-      :value="value"
-      @input="$emit('input', $event.target.value)"
-      :required="required"
-      :readonly="readonly"
-    />
+    <div>
+      <label :for="id" class="base-input__label">
+        {{ label }}
+      </label>
+      <input
+        :id="id"
+        :class="ifError"
+        :type="type"
+        :value="value"
+        @input="$emit('input', $event.target.value)"
+        :required="required"
+        :readonly="readonly"
+        :max="max"
+      />
+    </div>
+    <span class="base-input__span">{{error}}</span>
   </div>
 </template>
 
@@ -44,17 +48,21 @@ export default {
       default: false
     },
     error: {
-      type: Boolean,
-      default: false
+      type: String,
+      default: ''
+    },
+    max: {
+      type: String,
+      default: 'text'
     }
   },
   computed: {
     ifError() {
       return ['base-input', {
-        'base-input__error' : this.error 
+        'base-input__error' : this.error
       }]
     }
-  }
+  },
 }
 </script>
 
@@ -81,5 +89,9 @@ export default {
 }
 .base-input__error {
   border-color: red;
+}
+.base-input__span {
+  color: red;
+  position: absolute;
 }
 </style>

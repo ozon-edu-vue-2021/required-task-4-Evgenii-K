@@ -9,6 +9,7 @@
           v-mask="'####'"
           @input="update"
           required
+          :error="errors.series"
         />      
         <base-input
           type="number"
@@ -18,6 +19,7 @@
           v-mask="'######'"
           @input="update"
           required
+          :error="errors.number"
         />      
         <base-input
           type="date"
@@ -26,14 +28,16 @@
           v-model="passport.date"
           @input="update"
           required
+          :max="todaysDay"
         />
       </div>
     </div>
 </template>
 
 <script>
-import BaseInput from './BaseInput'
+import BaseInput from '../BaseComponents/BaseInput'
 import { VueMaskDirective } from "v-mask"
+import TodaysDate from '../../utils/TodaysDate.vue'
 
 export default {
   data() {
@@ -45,6 +49,13 @@ export default {
       }
     };
   },
+  props: {
+    errors: {
+      type: Object,
+      default: () => ({})
+    }
+  },
+  mixins: [ TodaysDate ],
   components: {
     BaseInput,
   },

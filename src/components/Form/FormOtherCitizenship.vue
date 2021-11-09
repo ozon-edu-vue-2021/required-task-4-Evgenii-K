@@ -9,6 +9,7 @@
         v-model.trim="passport.secondName"
         @input="update"
         required
+        :error="errors.secondName"
       />      
       <base-input
         type="text"
@@ -17,6 +18,7 @@
         v-model.trim="passport.firstName"
         @input="update"
         required
+        :error="errors.firstName"
       />  
 
       <span class="form__passport-span">
@@ -29,7 +31,7 @@
         type="number"
         label="Номер паспорта"
         id="passport_number_russian"
-        v-model.number="passport.number"
+        v-model="passport.number"
         @input="update"
         required
       />  
@@ -55,10 +57,10 @@
 </template>
 
 <script>
-import BaseInput from './BaseInput'
-import BaseMultiSelect from './BaseMultiSelect';
-import citizenships from '../assets/data/citizenships.json'
-import passportTypes from '../assets/data/passport-types.json'
+import BaseInput from '../BaseComponents/BaseInput'
+import BaseMultiSelect from '../BaseComponents/BaseMultiSelect';
+import citizenships from '../../assets/data/citizenships.json'
+import passportTypes from '../../assets/data/passport-types.json'
 
 export default {
   data() {
@@ -77,6 +79,12 @@ export default {
         citizenship: '',
       },
     };
+  },
+  props: {
+    errors: {
+      type: Object,
+      default: () => ({})
+    }
   },
   created() {
     if(this.citizenships.length) {

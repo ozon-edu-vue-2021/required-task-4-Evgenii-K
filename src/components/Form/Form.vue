@@ -12,6 +12,7 @@
           id="second_name"
           v-model.trim="formData.secondName"
           required
+          :error="errors.secondName"
         />      
         <base-input
           type="text"
@@ -19,12 +20,14 @@
           id="first_name"
           v-model.trim="formData.firstName"
           required
+          :error="errors.firstName"
         />      
         <base-input
           type="text"
           label="Отчество"
           id="third_name"
           v-model.trim="formData.thirdName"
+          :error="errors.thirdName"
         />
       </div>
 
@@ -35,6 +38,7 @@
           id="birthday"
           v-model="formData.birthday"
           required
+          :max="todaysDay"
         />      
       </div>
 
@@ -45,6 +49,7 @@
           id="email"
           v-model.trim="formData.email"
           required
+          :error="errors.email"
         />      
       </div>
     </div>
@@ -72,10 +77,12 @@
       <form-russian-citizenship 
         v-if="isRussian"
         @update="updatePassport"
+        :errors="errors.russian"
       />
       <form-other-citizenship 
         v-else
         @update="updatePassport"
+        :errors="errors.foreign"
       />
     </div>
 
@@ -117,13 +124,15 @@
 </template>
 
 <script>
-import BaseInput from './BaseInput'
-import BaseButton from './BaseButton'
+import BaseInput from '../BaseComponents/BaseInput'
+import BaseButton from '../BaseComponents/BaseButton'
 import FormRussianCitizenship from './FormRussianCitizenship';
 import FormOtherCitizenship from './FormOtherCitizenship';
-import BaseMultiSelect from './BaseMultiSelect';
-import citizenships from '../assets/data/citizenships.json'
-import BaseRadio from './BaseRadio.vue';
+import BaseMultiSelect from '../BaseComponents/BaseMultiSelect';
+import citizenships from '../../assets/data/citizenships.json'
+import BaseRadio from '../BaseComponents/BaseRadio.vue';
+import VuelidateMixin from '../../utils/VuelidateMixin.vue'
+import TodaysDate from '../../utils/TodaysDate.vue'
 
 export default {
   data() {
@@ -179,6 +188,7 @@ export default {
       ],
     };
   },
+  mixins: [ VuelidateMixin, TodaysDate ],
   components: {
     BaseInput,
     BaseButton,
@@ -199,8 +209,12 @@ export default {
       this.formData.citizenship = this.selectedСitizenships[this.propCitizenship]
     },
     onSubmit() {
-      const result = {...this.formData, passport: this.passport }
-      console.log(JSON.stringify(result));
+      this.$v.$touch()
+
+      if (!this.$v.$invalid) {
+        const result = {...this.formData, passport: this.passport }
+        console.log(JSON.stringify(result));  
+      }
     },
     updateGender(value) {
       this.formData.pickedGender = value
@@ -210,7 +224,8 @@ export default {
     },
     updatePassport(value) {
       this.passport =  {...this.passport, ...value}
-    }
+    },
+
   },
   computed: {
     isRussian() {
@@ -218,7 +233,7 @@ export default {
     },
     isPreviousName() {
       return this.previousName === 'true'
-    }
+    },
   },
 };
 </script>

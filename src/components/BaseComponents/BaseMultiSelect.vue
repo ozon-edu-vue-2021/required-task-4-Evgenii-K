@@ -85,7 +85,7 @@ export default {
         this.itemsAfterFilter = this.items
       }
 
-      this.debounceMethod(this)
+      this.debounceMethod()
     }
   },
   mounted() {
@@ -120,14 +120,14 @@ export default {
         : ''
     },
     debounceMethod: 
-      _.debounce((json) => {
-        console.log('Button clicked!', json.value)
+      _.debounce(function () {
+        console.log('Button clicked!', this.value)
 
-        if (json.value === '') {
-          json.itemsAfterFilter = json.items
+        if (this.value === '') {
+          this.itemsAfterFilter = this.items
         } else {
-          json.itemsAfterFilter = json.items.filter(item => 
-            item[json.propName].toLowerCase().includes(json.value.toLowerCase())
+          this.itemsAfterFilter = this.items.filter(item => 
+            item[this.propName].toLowerCase().includes(this.value.toLowerCase())
           )
         }
       }, 1000)
