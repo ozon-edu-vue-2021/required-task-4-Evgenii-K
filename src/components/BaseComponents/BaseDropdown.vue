@@ -49,6 +49,8 @@ export default {
   display: grid;
   width: 100%;
   padding: 5px 0;
+  max-height: 317px;
+  overflow: auto;
 }
 .drop-down-content > div {
   padding: 10px;
